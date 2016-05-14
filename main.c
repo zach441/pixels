@@ -40,6 +40,7 @@ int main(int argc, char** argv) {
     }
     //then finally turn the array into an image file
     fwrite(pixel_array, 1, fileend, outf);
+
     fclose(outf);
     free(pixel_array);
     return 0;

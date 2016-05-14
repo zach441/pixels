@@ -7,10 +7,8 @@
 #include <stdio.h>
 #ifndef INPUT_H_
 #define INPUT_H_
-unsigned long int getSize(FILE* myFile);
-unsigned long int getStart(FILE* myFile);
 
-char* getFile(FILE* myFile);
-
+unsigned int getSize(FILE* myFile);
+unsigned int getStart(FILE* myFile);
 
 #endif /* INPUT_H_ */

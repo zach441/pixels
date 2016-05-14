@@ -6,13 +6,23 @@
  */
 #include <stdio.h>
 
-unsigned long int getSize(FILE* myFile){
-    return 0;
-}
-unsigned long int getStart(FILE*myFile){
-    return 0;
+unsigned int getSize(FILE* myFile) {
+    fseek(myFile, 2, SEEK_SET);
+    unsigned int filesize = 0;
+    short i;
+    for (i = 0; i <= 3; i++) {
+        filesize += (unsigned int) fgetc(myFile) <<(i*8);
+    }
+    return filesize;
 }
 
-char* getFile(FILE* myFile){
-    return 0;
+//gets the location of the start of the pixel data
+unsigned int getStart(FILE*myFile) {
+    fseek(myFile, 0xA, SEEK_SET);
+    unsigned int arrStart = 0;
+    short i;
+    for (i = 0; i <= 3; i++) {
+        arrStart += (unsigned int) fgetc(myFile)<<(i*8);
+    }
+    return arrStart;
 }
