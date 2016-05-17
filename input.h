@@ -1,14 +1,16 @@
 /*
  * input.h
- *
+ *  Header file for input.c, prototypes &c.
  *  Created on: May 13, 2016
- *      Author: Zachary
+ *      Author: Zach Oakes
  */
 #include <stdio.h>
 #ifndef INPUT_H_
 #define INPUT_H_
 
-unsigned int getSize(FILE* myFile);
-unsigned int getStart(FILE* myFile);
+#include <stdio.h>
+unsigned int getSize(FILE*);
+unsigned int getStart(FILE*);
+char* initArray(FILE*);
 
 #endif /* INPUT_H_ */
