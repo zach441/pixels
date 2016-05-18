@@ -9,6 +9,7 @@
 
 #include "pixels.h"
 
+FILE* inInit(const char* name);
 unsigned int getSize(FILE*);
 unsigned int getStart(FILE*);
 signed int getWidth(FILE*);

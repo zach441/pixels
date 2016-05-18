@@ -11,6 +11,16 @@
 
 #include "pixels.h"
 
+FILE* inInit(const char* name){
+    FILE* temp;
+    temp = fopen(name, "rb");
+    if(temp == NULL){
+        perror("could not open input file");
+        exit(-4);
+    }
+    return temp;
+}
+
 //gets the size of the file from the header
 // todo: check it against the actual size of the file, should be the same
 unsigned int getSize(FILE* myFile) {
@@ -70,7 +80,7 @@ unsigned int getNumPixels(FILE* myFile) {
 //memory so that we can fit the whole file in the array
 char* getHeader(FILE*myFile) {
     unsigned int size;
-    size = getSize(myFile);
+    size = getStart(myFile);
     char*array;
     array = malloc(size);
     if (array == NULL) {
@@ -79,7 +89,13 @@ char* getHeader(FILE*myFile) {
     }
     unsigned int i;
     for (i = 0; i < size; i++) {
-        *(array + i) = (char) fgetc(myFile);
+        char temp = fgetc(myFile);
+        if(temp != EOF){
+            *(array + i) = temp;
+        } else{
+            perror("error in input/getHeader, end of file reached");
+            exit(-3);
+        }
     }
     rewind(myFile);
     return array;
@@ -93,13 +109,12 @@ pixel* makePixelArray(FILE* myFile) {
     //see wikipedia article /wiki/BMP_file_format for why this works
     unsigned int rowSize = ((24 * width + 31) / 32) * 4;
     unsigned int arraySize = rowSize * height;
-    printf("rowSize is %d, arraySize is %d\n", rowSize, arraySize);
     pixel* image;
     unsigned int numPix = getNumPixels(myFile);
     image = malloc((sizeof(pixel)) * (numPix));
     if (image == NULL) {
         perror("error allocating memory (input/makePixelArray)");
-        exit(-2);
+        exit(-1);
     }
 
     fseek(myFile, getStart(myFile), SEEK_SET);
@@ -111,15 +126,10 @@ pixel* makePixelArray(FILE* myFile) {
             image[i].grn = fgetc(myFile);
             image[i].red = fgetc(myFile);
             image[i].tot_rgb = image[i].blu + image[i].grn + image[i].red;
-            printf(
-                    "pixel number %3i has value %02x %02x %02x for a total of %x\n",
-                    i, image[i].red, image[i].grn, image[i].blu,
-                    image[i].tot_rgb);
             whichByte += 3;
         } else {
             fgetc(myFile);
             whichByte += 1;
-            printf("padding\n");
         }
     }
 

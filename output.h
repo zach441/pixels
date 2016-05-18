@@ -10,6 +10,6 @@
 #include "pixels.h"
 
 FILE* outInit(const char * name);
-void makeImage(char*, pixel*);
+void makeImage(char*, pixel*, FILE*);
 
 #endif /* OUTPUT_H_ */
