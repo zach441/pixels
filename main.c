@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
     for (i = dataStart; i <= fileEnd + 1; i++) {
         header[i] = 0x80;
     }
-    //makePixelArray(inF);
+    makePixelArray(inF);
     free(header);
 #ifndef dry_run
     fwrite(header, 1, fileEnd, outF);

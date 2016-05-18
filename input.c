@@ -43,7 +43,7 @@ signed int getWidth(FILE* myFile) {
     signed int width = 0;
     char i;
     for (i = 0; i <= 3; i++) {
-        width += (signed int) (fgetc(myFile)<< (i * 8));
+        width += (signed int) (fgetc(myFile) << (i * 8));
     }
     rewind(myFile);
     return width;
@@ -86,8 +86,14 @@ char* getHeader(FILE*myFile) {
 }
 
 //todo: make this more efficient
-//XXX: this doesn't yet account for the padding that's part of the file format
 pixel* makePixelArray(FILE* myFile) {
+    signed int height = getHeight(myFile);
+    signed int width = getWidth(myFile);
+
+    //see wikipedia article /wiki/BMP_file_format for why this works
+    unsigned int rowSize = ((24 * width + 31) / 32) * 4;
+    unsigned int arraySize = rowSize * height;
+    printf("rowSize is %d, arraySize is %d\n", rowSize, arraySize);
     pixel* image;
     unsigned int numPix = getNumPixels(myFile);
     image = malloc((sizeof(pixel)) * (numPix));
@@ -97,14 +103,25 @@ pixel* makePixelArray(FILE* myFile) {
     }
 
     fseek(myFile, getStart(myFile), SEEK_SET);
-    unsigned int i;
-    for (i = 0; i < numPix; i++) {
-        image[i].blu = fgetc(myFile);
-        image[i].grn = fgetc(myFile);
-        image[i].red = fgetc(myFile);
-        image[i].tot_rgb = image[i].blu + image[i].grn + image[i].red;
-        printf("pixel number %3i has value %02x %02x %02x for a total of %x\n",
-                i, image[i].red, image[i].grn, image[i].blu, image[i].tot_rgb);
+
+    unsigned int i, whichByte = 0;
+    for (i = 0; whichByte < arraySize; i++) {
+        if ((whichByte % rowSize) < (width*3)) {
+            image[i].blu = fgetc(myFile);
+            image[i].grn = fgetc(myFile);
+            image[i].red = fgetc(myFile);
+            image[i].tot_rgb = image[i].blu + image[i].grn + image[i].red;
+            printf(
+                    "pixel number %3i has value %02x %02x %02x for a total of %x\n",
+                    i, image[i].red, image[i].grn, image[i].blu,
+                    image[i].tot_rgb);
+            whichByte += 3;
+        } else {
+            fgetc(myFile);
+            whichByte += 1;
+            printf("padding\n");
+        }
     }
+
     return image;
 }
