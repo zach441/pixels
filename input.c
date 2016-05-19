@@ -10,11 +10,13 @@
  */
 
 #include "pixels.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-FILE* inInit(const char* name){
+FILE* inInit(const char* name) {
     FILE* temp;
     temp = fopen(name, "rb");
-    if(temp == NULL){
+    if (temp == NULL) {
         perror("could not open input file");
         exit(-4);
     }
@@ -78,10 +80,10 @@ unsigned int getNumPixels(FILE* myFile) {
 
 //get the header from the input image and store it to an array, mallocing enough
 //memory so that we can fit the whole file in the array
-char* getHeader(FILE*myFile) {
+unsigned char* getHeader(FILE*myFile) {
     unsigned int size;
-    size = getStart(myFile);
-    char*array;
+    size = getStart(myFile) - 1;
+    unsigned char*array;
     array = malloc(size);
     if (array == NULL) {
         perror("error while allocating memory see input/initArray");
@@ -90,9 +92,9 @@ char* getHeader(FILE*myFile) {
     unsigned int i;
     for (i = 0; i < size; i++) {
         char temp = fgetc(myFile);
-        if(temp != EOF){
+        if (temp != EOF) {
             *(array + i) = temp;
-        } else{
+        } else {
             perror("error in input/getHeader, end of file reached");
             exit(-3);
         }
@@ -107,7 +109,7 @@ pixel* makePixelArray(FILE* myFile) {
     signed int width = getWidth(myFile);
 
     //see wikipedia article /wiki/BMP_file_format for why this works
-    unsigned int rowSize = ((24 * width + 31) / 32) * 4;
+    unsigned int rowSize = (((24 * width) + 31) / 32) * 4;
     unsigned int arraySize = rowSize * height;
     pixel* image;
     unsigned int numPix = getNumPixels(myFile);
@@ -121,7 +123,7 @@ pixel* makePixelArray(FILE* myFile) {
 
     unsigned int i, whichByte = 0;
     for (i = 0; whichByte < arraySize; i++) {
-        if ((whichByte % rowSize) < (width*3)) {
+        if ((whichByte % rowSize) < (width * 3)) {
             image[i].blu = fgetc(myFile);
             image[i].grn = fgetc(myFile);
             image[i].red = fgetc(myFile);

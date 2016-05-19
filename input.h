@@ -7,6 +7,7 @@
 #ifndef INPUT_H_
 #define INPUT_H_
 
+#include <stdio.h>
 #include "pixels.h"
 
 FILE* inInit(const char* name);
@@ -16,7 +17,7 @@ signed int getWidth(FILE*);
 signed int getHeight(FILE*);
 unsigned int getNumPixels(FILE*);
 
-char* getHeader(FILE*);
+unsigned char* getHeader(FILE*);
 pixel *makePixelArray(FILE*);
 
 #endif /* INPUT_H_ */
