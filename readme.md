@@ -7,6 +7,7 @@ Update 2016 May 18
 * Input and output utilities work
 * I've realized that I'm building a command line tool to manipulate images which is actually kinda funny if you think about it
 * diff confirms that input and output are the same which makes sense because the image isn't being processed at all
+* I've realized that I'm building a command line tool to manipulate images
 * Next thing is going to be actually processing the data now that I have it
 
 
