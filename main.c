@@ -12,7 +12,7 @@
 #include <stdlib.h>
 
 //#define debug_mode
-#define dry_run
+//#define dry_run
 
 int main(int argc, char** argv) {
     setbuf(stdout, NULL);

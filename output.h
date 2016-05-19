@@ -8,8 +8,9 @@
 #define OUTPUT_H_
 
 #include "pixels.h"
+#include <stdio.h>
 
 FILE* outInit(const char * name);
-void makeImage(char*, pixel*, FILE*);
+void makeImage(unsigned char*, pixel*, FILE*);
 
 #endif /* OUTPUT_H_ */
