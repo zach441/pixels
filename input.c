@@ -61,10 +61,10 @@ signed int getWidth(FILE* myFile) {
     return width;
 }
 
-//gets the height of the image in pixels fro mthe header data
+//gets the height of the image in pixels from the header data
 //signed because it is in the spec
 signed int getHeight(FILE* myFile) {
-    fseek(myFile, 0x12, SEEK_SET);
+    fseek(myFile, 0x16, SEEK_SET);
     signed int height = 0;
     char i;
     for (i = 0; i <= 3; i++) {
