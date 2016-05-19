@@ -6,8 +6,12 @@
  */
 
 #include "pixels.h"
+#include "output.h"
+#include "input.h"
+#include <stdio.h>
+#include <stdlib.h>
 #define debug_mode
-//#define dry_run
+#define dry_run
 
 int main(int argc, char** argv) {
     setbuf(stdout, NULL);
@@ -20,11 +24,17 @@ int main(int argc, char** argv) {
     unsigned int fileEnd = getSize(inF);
     unsigned int dataStart = getStart(inF);
     //code goes here
-    char* header = getHeader(inF);
-    puts("got header");
+    unsigned char* header = getHeader(inF);
     pixel* image = makePixelArray(inF);
-    makeImage(header, image, outF);
+    puts("made pixel array, contents:");
+    int foo;
+    for (foo = 0; foo < getNumPixels(inF); foo++) {
+        printf("pix #%02d value %02x %02x %02x\n", foo, image[foo].blu,
+                image[foo].grn, image[foo].red);
+    }
+
 #ifndef dry_run
+    makeImage(header, image, outF);
     fclose(outF);
 #endif// dry_run
 #ifdef debug_mode
@@ -32,7 +42,7 @@ int main(int argc, char** argv) {
     printf("data starts at %x\n", dataStart);
     printf("image is %d pixels wide\n", getWidth(inF));
     printf("image is %d pixels tall\n", getHeight(inF));
-    printf("image has %i pixels\n", getNumPixels(inF));
+    printf("image has %u pixels\n", getNumPixels(inF));
 #endif //debug_mode
     fclose(inF);
     free(header);

@@ -110,7 +110,8 @@ pixel* makePixelArray(FILE* myFile) {
 
     //see wikipedia article /wiki/BMP_file_format for why this works
     unsigned int rowSize = (((24 * width) + 31) / 32) * 4;
-    unsigned int arraySize = rowSize * height;
+    unsigned int paddingLen = (rowSize - (width * 3));
+
     pixel* image;
     unsigned int numPix = getNumPixels(myFile);
     image = malloc((sizeof(pixel)) * (numPix));
@@ -121,17 +122,20 @@ pixel* makePixelArray(FILE* myFile) {
 
     fseek(myFile, getStart(myFile), SEEK_SET);
 
-    unsigned int i, whichByte = 0;
-    for (i = 0; whichByte < arraySize; i++) {
+    unsigned int arraySize = rowSize * height;
+    unsigned int i = 0, whichByte = 0;
+    while(whichByte < arraySize) {
         if ((whichByte % rowSize) < (width * 3)) {
             image[i].blu = fgetc(myFile);
             image[i].grn = fgetc(myFile);
             image[i].red = fgetc(myFile);
             image[i].tot_rgb = image[i].blu + image[i].grn + image[i].red;
             whichByte += 3;
+            i++;
         } else {
-            fgetc(myFile);
-            whichByte += 1;
+            fseek(myFile, paddingLen, SEEK_CUR);
+            whichByte += paddingLen;
+
         }
     }
 
