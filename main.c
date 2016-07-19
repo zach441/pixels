@@ -14,6 +14,14 @@
 //#define debug_mode
 //#define dry_run
 
+int comparePixels(const void* first, const void* second) {
+	const pixel* a = first;
+	const pixel* b = second;
+	if(a -> tot_rgb < b -> tot_rgb) return -1;
+	if(a -> tot_rgb > b -> tot_rgb) return 1;
+	return 0;
+}
+
 int main(int argc, char** argv) {
     char* inName = malloc(64);
     char* outName = malloc(64);
@@ -47,11 +55,11 @@ int main(int argc, char** argv) {
     FILE* outF;
     outF = outInit(outName);
 #endif //dry_run
-    unsigned int fileEnd = getSize(inF);
-    unsigned int dataStart = getStart(inF);
-    //code goes here
     unsigned char* header = getHeader(inF);
     pixel* image = makePixelArray(inF);
+    //now we'll try and sort the pixels
+    qsort(image,getNumPixels(inF), sizeof(pixel), comparePixels); 
+
 #ifdef debug_mode
     puts("made pixel array, contents:");
     int foo;
