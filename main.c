@@ -19,6 +19,13 @@ int comparePixels(const void* first, const void* second) {
 	const pixel* b = second;
 	if(a -> tot_rgb < b -> tot_rgb) return -1;
 	if(a -> tot_rgb > b -> tot_rgb) return 1;
+	if(a -> red < b -> red) return -1;
+	if(a -> red > b -> red) return 1;
+	if(a -> grn < b -> grn) return -1;
+	if(a -> grn > b -> grn) return 1;
+	if(a -> blu < b -> blu) return -1;
+	if(a -> blu > b -> blu) return 1;
+
 	return 0;
 }
 
