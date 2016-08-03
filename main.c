@@ -50,6 +50,10 @@ int main(int argc, char** argv) {
 			}
 		}
 		inName = argv[argc-1];
+		if(!strcmp(inName, "--help")){
+			printHelp();
+			exit(1);
+		}
 	} else {
 		inName = "in.bmp";
 		outName = "out.bmp";
