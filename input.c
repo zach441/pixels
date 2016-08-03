@@ -4,6 +4,8 @@
  *	type files, other types to be added in a later release.
  *
  *	TODO: error on bad files
+ *  TODO: check that files are of the 24bit bmp format, I think this can be...
+ *        read in from the header
  *
  *	Created on: May 13, 2016
  *		Author: Zach Oakes
